@@ -115,6 +115,7 @@
     "close": "Close",
     "showMore": "Show more",
     "continue": "Continue",
+    "continueWithEmail": "Continue with Email",
     "addReason": "Add Reason",
     "addNote": "Add Note",
     "reset": "Reset",
@@ -533,7 +534,8 @@
     },
     "variant": {
       "edit": {
-        "header": "Edit Variant"
+        "header": "Edit Variant",
+        "success": "Product variant edited sucessfully"
       },
       "create": {
         "header": "Variant details"
@@ -546,6 +548,7 @@
       "inventory": {
         "notManaged": "Not managed",
         "manageItems": "Manage inventory items",
+        "notManagedDesc": "Inventory is not managed for this variant. Turn on ‘Manage Inventory’ to track the variant's inventory.",
         "manageKit": "Manage inventory kit",
         "navigateToItem": "Go to inventory item",
         "actions": {
@@ -610,6 +613,7 @@
     "subtitle": "Organize products into collections.",
     "createCollection": "Create Collection",
     "createCollectionHint": "Create a new collection to organize your products.",
+    "createSuccess": "Collection created successfully.",
     "editCollection": "Edit Collection",
     "handleTooltip": "The handle is used to reference the collection in your storefront. If not specified, the handle will be generated from the collection title.",
     "deleteWarning": "You are about to delete the collection {{title}}. This action cannot be undone.",
@@ -731,7 +735,11 @@
       "descriptionPlaceholder": "What type of reservation is this?",
       "successToast": "Reservation was successfully created.",
       "updateSuccessToast": "Reservation was successfully updated.",
-      "deleteSuccessToast": "Reservation was successfully deleted."
+      "deleteSuccessToast": "Reservation was successfully deleted.",
+      "errors": {
+        "noAvaliableQuantity": "Stock location doesn't have available quantity.",
+        "quantityOutOfRange": "Minimum quantity is 1 and maximum quantity is {{max}}"
+      }
     },
     "toast": {
       "updateLocations": "Locations updated successfully.",
@@ -776,6 +784,7 @@
         "noRecordsMessage": "This customer doesn't belong to any group."
       },
       "add": {
+        "success": "Customer added to: {{groups}}.",
         "list": {
           "noRecordsMessage": "Please create a customer group first."
         }
@@ -1087,6 +1096,7 @@
       "statusTitle": "Fulfillment Status",
       "fulfillItems": "Fulfill items",
       "awaitingFulfillmentBadge": "Awaiting fulfillment",
+      "requiresShipping": "Requires shipping",
       "number": "Fulfillment #{{number}}",
       "itemsToFulfill": "Items to fulfill",
       "create": "Create Fulfillment",
@@ -2337,19 +2347,20 @@
   },
   "login": {
     "forgotPassword": "Forgot password? - <0>Reset</0>",
-    "title": "Log in",
-    "hint": "to continue to Medusa"
+    "title": "Welcome to Medusa",
+    "hint": "Sign in to access the account area"
   },
   "invite": {
-    "title": "Create your account",
-    "hint": "to continue to Medusa",
+    "title": "Welcome to Medusa",
+    "hint": "Create you account below",
+    "backToLogin": "Back to login",
     "createAccount": "Create account",
     "alreadyHaveAccount": "Already have an account? - <0>Log in</0>",
     "emailTooltip": "Your email cannot be changed. If you would like to use another email, a new invite must be sent.",
     "invalidInvite": "The invite is invalid or has expired.",
-    "successTitle": "Your account has been created",
+    "successTitle": "Your account has is registered",
     "successHint": "Get started with Medusa Admin right away.",
-    "successAction": "Sign in to start using Medusa",
+    "successAction": "Start Medusa Admin",
     "invalidTokenTitle": "Your invite token is invalid",
     "invalidTokenHint": "Try requesting a new invite link.",
     "passwordMismatch": "Passwords do not match",
@@ -2362,15 +2373,23 @@
     "hint": "Enter your email below, and we will send you instructions on how to reset your password.",
     "email": "Email",
     "sendResetInstructions": "Send reset instructions",
-    "backToLogin": "You can always go back - <0>Log in</0>",
+    "backToLogin": "<0>Back to login</0>",
     "newPasswordHint": "Choose a new password below.",
     "invalidTokenTitle": "Your reset token is invalid",
     "invalidTokenHint": "Try requesting a new reset link.",
     "expiredTokenTitle": "Your reset token has expired",
     "goToResetPassword": "Go to Reset Password",
     "resetPassword": "Reset password",
+    "newPassword": "New password",
+    "repeatNewPassword": "Repeat new password",
     "tokenExpiresIn": "Token expires in <0>{{time}}</0> minutes",
-    "successfulRequest": "We have sent you an email with instructions on how to reset your password. If you don't receive an email, please check your spam folder or try again."
+    "successfulRequestTitle": "Successfully sent you an email",
+    "successfulRequest": "We've sent you an email which you can use to reset your password. Check your spam folder if you haven't received it after a few minutes.",
+    "successfulResetTitle": "Password reset successful",
+    "successfulReset": "Please login in on the login page.",
+    "passwordMismatch": "Passwords do no match",
+    "invalidLinkTitle": "Your reset link is invalid",
+    "invalidLinkHint": "Try resetting your password again."
   },
   "workflowExecutions": {
     "domain": "Workflows",

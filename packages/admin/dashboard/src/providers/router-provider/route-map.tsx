@@ -27,6 +27,10 @@ export const RouteMap: RouteObject[] = [
     lazy: () => import("../../routes/login"),
   },
   {
+    path: "/reset-password",
+    lazy: () => import("../../routes/reset-password"),
+  },
+  {
     path: "*",
     lazy: () => import("../../routes/no-match"),
   },
@@ -90,6 +94,13 @@ export const RouteMap: RouteObject[] = [
                         path: "edit",
                         lazy: () =>
                           import("../../routes/products/product-edit"),
+                      },
+                      {
+                        path: "edit-variant",
+                        lazy: () =>
+                          import(
+                            "../../routes/product-variants/product-variant-edit"
+                          ),
                       },
                       {
                         path: "sales-channels",

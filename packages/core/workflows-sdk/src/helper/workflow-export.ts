@@ -6,12 +6,18 @@ import {
   TransactionHandlerType,
   TransactionState,
 } from "@medusajs/orchestration"
-import { Context, LoadedModule, MedusaContainer } from "@medusajs/types"
+import {
+  Context,
+  IEventBusModuleService,
+  LoadedModule,
+  Logger,
+  MedusaContainer,
+} from "@medusajs/types"
 import {
   ContainerRegistrationKeys,
+  isPresent,
   MedusaContextType,
   Modules,
-  isPresent,
 } from "@medusajs/utils"
 import { EOL } from "os"
 import { ulid } from "ulid"
@@ -44,6 +50,7 @@ function createContextualWorkflowRunner<
   dataPreparation?: (data: TData) => Promise<unknown>
   options?: {
     wrappedInput?: boolean
+    sourcePath?: string
   }
   container?: LoadedModule[] | MedusaContainer
 }): Omit<
@@ -88,11 +95,12 @@ function createContextualWorkflowRunner<
 
     const { eventGroupId, parentStepIdempotencyKey } = context
 
-    attachOnFinishReleaseEvents(events, eventGroupId!, flow, { logOnError })
+    attachOnFinishReleaseEvents(events, flow, { logOnError })
 
     const flowMetadata = {
       eventGroupId,
       parentStepIdempotencyKey,
+      sourcePath: options?.sourcePath,
     }
 
     const args = [
@@ -334,6 +342,7 @@ export const exportWorkflow = <TData = unknown, TResult = unknown>(
   dataPreparation?: (data: TData) => Promise<unknown>,
   options?: {
     wrappedInput?: boolean
+    sourcePath?: string
   }
 ): MainExportedWorkflow<TData, TResult> => {
   function exportedWorkflow<
@@ -493,7 +502,6 @@ export const exportWorkflow = <TData = unknown, TResult = unknown>(
 
 function attachOnFinishReleaseEvents(
   events: DistributedTransactionEvents = {},
-  eventGroupId: string,
   flow: LocalWorkflow,
   {
     logOnError,
@@ -509,9 +517,10 @@ function attachOnFinishReleaseEvents(
     errors?: unknown[]
   }) => {
     const { transaction } = args
+    const flowEventGroupId = transaction.getFlow().metadata?.eventGroupId
 
     const logger =
-      (flow.container as MedusaContainer).resolve(
+      (flow.container as MedusaContainer).resolve<Logger>(
         ContainerRegistrationKeys.LOGGER,
         { allowUnregistered: true }
       ) || console
@@ -536,12 +545,13 @@ function attachOnFinishReleaseEvents(
 
     await onFinish?.(args)
 
-    const eventBusService = (flow.container as MedusaContainer).resolve(
-      Modules.EVENT_BUS,
-      { allowUnregistered: true }
-    )
+    const eventBusService = (
+      flow.container as MedusaContainer
+    ).resolve<IEventBusModuleService>(Modules.EVENT_BUS, {
+      allowUnregistered: true,
+    })
 
-    if (!eventBusService || !eventGroupId) {
+    if (!eventBusService || !flowEventGroupId) {
       return
     }
 
@@ -549,17 +559,17 @@ function attachOnFinishReleaseEvents(
 
     if (failedStatus.includes(transaction.getState())) {
       return await eventBusService
-        .clearGroupedEvents(eventGroupId)
+        .clearGroupedEvents(flowEventGroupId)
         .catch(() => {
           logger.warn(
-            `Failed to clear events for eventGroupId - ${eventGroupId}`
+            `Failed to clear events for eventGroupId - ${flowEventGroupId}`
           )
         })
     }
 
-    await eventBusService.releaseGroupedEvents(eventGroupId).catch((e) => {
+    await eventBusService.releaseGroupedEvents(flowEventGroupId).catch((e) => {
       logger.error(
-        `Failed to release grouped events for eventGroupId: ${eventGroupId}`,
+        `Failed to release grouped events for eventGroupId: ${flowEventGroupId}`,
         e
       )
 
